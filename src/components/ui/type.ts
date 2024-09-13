@@ -1,3 +1,5 @@
+import type React from 'react';
+
 /**
  * Represents a generic type for React element types.
  */
@@ -90,27 +92,13 @@ type ComponentWithAs<Component extends As, Props extends object = object> = {
       React.ComponentProps<AsComponent>,
       Props,
       AsComponent
-    >
+    >,
+    ref: React.ForwardedRef<unknown>
   ): JSX.Element | Promise<JSX.Element>;
   /**
    * Specifies the display name of the component.
    */
   displayName?: string;
-
-  /**
-   * Specifies the props types of the component.
-   */
-  propTypes?: React.WeakValidationMap<unknown>;
-
-  /**
-   * Specifies the context types of the component.
-   */
-  contextTypes?: React.ValidationMap<unknown>;
-
-  /**
-   * Specifies the default props of the component.
-   */
-  defaultProps?: Partial<unknown>;
 
   /**
    * Specifies the component identifier.
