@@ -93,7 +93,7 @@ type ComponentWithAs<Component extends As, Props extends object = object> = {
       Props,
       AsComponent
     >,
-    ref: React.ForwardedRef<unknown>
+    ref: React.ForwardedRef<React.ElementRef<Component>>
   ): JSX.Element | Promise<JSX.Element>;
   /**
    * Specifies the display name of the component.
