@@ -1,7 +1,7 @@
 import Box from '@/components/ui/layout/box';
 import type { UIComponent } from '@/components/ui/type';
 import { cn } from '@/lib/utils';
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 
 /**
  * The props of the Spacer component.
@@ -18,21 +18,29 @@ type SpacerProps = {
  *
  * @example
  * <Flex>
- *  <Box>Item 1</Box>
+ *  <>Item 1</>
  *  <Spacer />
- *  <Box>Item 2</Box>
+ *  <>Item 2</>
  * </Flex>
  *
  * @param props - The props of the component
  *
  * @returns The Spacer component
  */
-const Spacer: UIComponent<'div', SpacerProps> = (props): JSX.Element => {
-  const { children, className, ...rest } = props;
+const Spacer: UIComponent<'div', SpacerProps> = memo(
+  forwardRef(((props, ref) => {
+    const { children, className, ...rest } = props;
+    const remainingProps: object = { ...rest, ref };
 
-  return <Box className={cn('flex-1 self-stretch', className)} {...rest} />;
-};
+    return (
+      <Box
+        className={cn('flex-1 place-self-stretch', className)}
+        {...remainingProps}
+      />
+    );
+  }) satisfies UIComponent<'div', SpacerProps>)
+) as UIComponent<'div', SpacerProps>;
 
 Spacer.displayName = 'Spacer';
 
-export default forwardRef(Spacer) as typeof Spacer;
+export default Spacer;

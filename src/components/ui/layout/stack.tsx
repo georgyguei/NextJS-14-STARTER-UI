@@ -2,7 +2,7 @@ import Flex from '@/components/ui/layout/flex';
 import type { UIComponent } from '@/components/ui/type';
 import { cn } from '@/lib/utils';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 
 /**
  * Configures variants for the Stack component, allowing for customizable direction and spacing.
@@ -32,18 +32,24 @@ type StackProps = VariantProps<typeof stackVariants>;
  *  ...
  * </Stack>
  *
- * @param {object} props - The props of the component
+ * @param props - The props of the component
  *
- * @returns {JSX.Element} - The Stack component
+ * @returns The Stack component
  */
-const Stack: UIComponent<'div', StackProps> = props => {
-  const { className, direction, ...rest } = props;
+const Stack: UIComponent<'div', StackProps> = memo(
+  forwardRef(((props, ref) => {
+    const { className, direction, ...rest } = props;
+    const remainingProps: object = { ...rest, ref };
 
-  return (
-    <Flex className={cn(stackVariants({ direction, className }))} {...rest} />
-  );
-};
+    return (
+      <Flex
+        className={cn(stackVariants({ direction, className }))}
+        {...remainingProps}
+      />
+    );
+  }) satisfies UIComponent<'div', StackProps>)
+) as UIComponent<'div', StackProps>;
 
 Stack.displayName = 'Stack';
 
-export default forwardRef(Stack) as typeof Stack;
+export default Stack;
