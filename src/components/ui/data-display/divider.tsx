@@ -2,25 +2,7 @@ import Box from '@/components/ui/layout/box';
 import type { UIComponent } from '@/components/ui/type';
 import { cn } from '@/lib/utils';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { forwardRef } from 'react';
-
-/**
- * The sizes of the Divider component
- */
-const DIVIDER_SIZES = {
-  xs: 'border-[1px]',
-  sm: 'border-[2px]',
-  md: 'border-[3px]',
-  lg: 'border-[4px]',
-};
-
-/**
- * The orientations of the Divider component
- */
-const DIVIDER_ORIENTATIONS = {
-  horizontal: 'w-full border-l-0',
-  vertical: 'h-full border-b-0',
-};
+import { forwardRef, memo } from 'react';
 
 /**
  * The variants of the Divider component
@@ -29,8 +11,16 @@ const dividerVariants = cva(
   'overflow-visible border-inherit border-t-0 border-r-0 border-solid opacity-60',
   {
     variants: {
-      size: DIVIDER_SIZES,
-      orientation: DIVIDER_ORIENTATIONS,
+      size: {
+        xs: 'border-[1px]',
+        sm: 'border-[2px]',
+        md: 'border-[3px]',
+        lg: 'border-[4px]',
+      },
+      orientation: {
+        horizontal: 'w-full border-l-0',
+        vertical: 'h-full border-b-0',
+      },
     },
     defaultVariants: {
       size: 'xs',
@@ -44,7 +34,6 @@ const dividerVariants = cva(
  */
 type DividerProps = VariantProps<typeof dividerVariants> & {
   children?: never;
-  as?: never;
 };
 
 /**
@@ -57,19 +46,22 @@ type DividerProps = VariantProps<typeof dividerVariants> & {
  *
  * @returns The Divider component
  */
-const Divider: UIComponent<'hr', DividerProps> = (props): JSX.Element => {
-  const { className, orientation, size, children, ...rest } = props;
+const Divider: UIComponent<'hr', DividerProps> = memo(
+  forwardRef(((props, ref): JSX.Element => {
+    const { orientation, size, className, children, ...rest } = props;
+    const remainingProps: object = { ...rest, ref };
 
-  return (
-    <Box
-      as="hr"
-      className={cn(dividerVariants({ size, orientation, className }))}
-      aria-orientation={orientation || 'horizontal'}
-      {...rest}
-    />
-  );
-};
+    return (
+      <Box
+        as="hr"
+        aria-orientation={orientation || 'horizontal'}
+        className={cn(dividerVariants({ size, orientation, className }))}
+        {...remainingProps}
+      />
+    );
+  }) satisfies UIComponent<'hr', DividerProps>)
+) as UIComponent<'hr', DividerProps>;
 
 Divider.displayName = 'Divider';
 
-export default forwardRef(Divider) as typeof Divider;
+export default Divider;
