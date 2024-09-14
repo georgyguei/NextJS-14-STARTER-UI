@@ -1,6 +1,6 @@
 import type { UIComponent } from '@/components/ui/type';
 import type React from 'react';
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 
 /**
  * Box is a layout component that can be used to wrap other components.
@@ -14,12 +14,17 @@ import { forwardRef } from 'react';
  *
  * @returns The Box component.
  */
-const Box: UIComponent<'div', object> = (props, ref) => {
-  const { as: As = 'div', ...rest } = props;
-  const Tag = As as React.ElementType;
-  return <Tag {...rest} ref={ref} />;
-};
+const Box: UIComponent<'div', object> = memo(
+  forwardRef(((props, ref) => {
+    const { as: As = 'div', ...rest } = props;
+    const remainingProps: object = { ...rest, ref };
+
+    const Tag = As as React.ElementType;
+
+    return <Tag {...remainingProps} />;
+  }) satisfies UIComponent<'div', object>)
+) as UIComponent<'div', object>;
 
 Box.displayName = 'Box';
 
-export default forwardRef(Box) as typeof Box;
+export default Box;
