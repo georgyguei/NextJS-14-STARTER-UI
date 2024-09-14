@@ -2,17 +2,7 @@ import Box from '@/components/ui/layout/box';
 import type { UIComponent } from '@/components/ui/type';
 import { cn } from '@/lib/utils';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { forwardRef } from 'react';
-
-/**
- * Defines CSS class mappings for centering elements absolutely on different axes.
- * `horizontal` centers horizontally, `vertical` centers vertically, and `both` centers on both axes.
- */
-const ABSOLUTE_CENTER_AXIS = {
-  horizontal: '-translate-x-1/2 left-1/2',
-  vertical: '-translate-y-1/2 top-1/2',
-  both: '-translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2',
-};
+import { forwardRef, memo } from 'react';
 
 /**
  * Configures variants for absolute centering using `cva`, setting 'absolute' as the base class.
@@ -20,10 +10,11 @@ const ABSOLUTE_CENTER_AXIS = {
  */
 const absoluteCenterVariants = cva('absolute', {
   variants: {
-    /**
-     * The axis to center the child element on.
-     */
-    axis: ABSOLUTE_CENTER_AXIS,
+    axis: {
+      horizontal: '-translate-x-1/2 left-1/2',
+      vertical: '-translate-y-1/2 top-1/2',
+      both: '-translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2',
+    },
   },
   defaultVariants: {
     axis: 'both',
@@ -41,23 +32,27 @@ type AbsoluteCenterProps = VariantProps<typeof absoluteCenterVariants>;
  *
  * @example
  * <AbsoluteCenter axis="both">
- *  <>Content</>
+ *  ...
  * </AbsoluteCenter>
  *
  * @param props - The props of the component.
  *
  * @returns The AbsoluteCenter component.
  */
-const AbsoluteCenter: UIComponent<'div', AbsoluteCenterProps> = props => {
-  const { axis, className, ...rest } = props;
-  return (
-    <Box
-      className={cn(absoluteCenterVariants({ axis, className }))}
-      {...rest}
-    />
-  );
-};
+const AbsoluteCenter: UIComponent<'div', AbsoluteCenterProps> = memo(
+  forwardRef(((props, ref) => {
+    const { axis, className, ...rest } = props;
+    const remainingProps: object = { ...rest, ref };
+
+    return (
+      <Box
+        className={cn(absoluteCenterVariants({ axis, className }))}
+        {...remainingProps}
+      />
+    );
+  }) satisfies UIComponent<'div', AbsoluteCenterProps>)
+) as UIComponent<'div', AbsoluteCenterProps>;
 
 AbsoluteCenter.displayName = 'AbsoluteCenter';
 
-export default forwardRef(AbsoluteCenter) as typeof AbsoluteCenter;
+export default AbsoluteCenter;
