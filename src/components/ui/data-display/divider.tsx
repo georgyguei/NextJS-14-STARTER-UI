@@ -46,7 +46,7 @@ type DividerProps = VariantProps<typeof dividerVariants> & {
  *
  * @returns The Divider component
  */
-const Divider: UIComponent<'hr', DividerProps> = memo(
+const Divider = memo(
   forwardRef(((props, ref): JSX.Element => {
     const { orientation, size, className, children, ...rest } = props;
     const remainingProps: object = { ...rest, ref };
