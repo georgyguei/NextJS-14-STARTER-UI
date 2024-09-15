@@ -1,5 +1,5 @@
-import Box from '@/components/ui/layout/box';
 import type { UIComponent } from '@/components/ui/type';
+import Text, { type TextProps } from '@/components/ui/typography/text';
 import { cn } from '@/lib/utils';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { forwardRef, memo } from 'react';
@@ -28,7 +28,7 @@ const headingVariant = cva('font-bold font-heading', {
 /**
  * The props of the Heading component.
  */
-type HeadingProps = VariantProps<typeof headingVariant>;
+type HeadingProps = VariantProps<typeof headingVariant> & TextProps;
 
 /**
  * Heading is used to render semantic HTML heading elements.
@@ -48,7 +48,7 @@ const Heading = memo(
     const remainingProps: object = { ...rest, ref };
 
     return (
-      <Box
+      <Text
         as="h2"
         className={cn(headingVariant({ size, className }))}
         {...remainingProps}
