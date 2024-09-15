@@ -3,6 +3,49 @@
 @tailwind utilities;
 
 @layer base {
+  :root[data-theme="system"] {
+    --body-text: theme("colors.gray.800");
+    --body-bg: theme("colors.white");
+    --border-color: theme("colors.gray.200");
+    --inverse-text: theme("colors.white");
+    --subtle-bg: theme("colors.gray.100");
+    --subtle-text: theme("colors.gray.600");
+    --placeholder-color: theme("colors.gray.500");
+
+    --accent: theme("colors.teal.500");
+    --accent-emphasis: theme("colors.teal.700");
+    --accent-static: theme("colors.teal.500");
+    --accent-muted: theme("colors.teal.300");
+    --accent-subtle: theme("colors.teal.50");
+    --fg: theme("colors.gray.700");
+    --fg-emphasis: theme("colors.gray.900");
+    --fg-muted: theme("colors.gray.600");
+    --fg-subtle: theme("colors.gray.500");
+    --fg-on-accent: theme("colors.white");
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root[data-theme="system"] {
+      --body-text: theme("colors.whiteAlpha.900");
+      --body-bg: theme("colors.gray.800");
+      --border-color: theme("colors.whiteAlpha.300");
+      --inverse-text: theme("colors.gray.800");
+      --subtle-bg: theme("colors.gray.700");
+      --subtle-text: theme("colors.gray.400");
+      --placeholder-color: theme("colors.whiteAlpha.400");
+
+      --accent: theme("colors.teal.300");
+      --accent-emphasis: theme("colors.teal.200");
+      --accent-muted: theme("colors.teal.200");
+      --accent-subtle: theme("colors.teal.800");
+      --fg: theme("colors.gray.100");
+      --fg-emphasis: theme("colors.gray.200");
+      --fg-muted: theme("colors.gray.400");
+      --fg-subtle: theme("colors.gray.300");
+      --fg-on-accent: inherit;
+    }
+  }
+
   :root[data-theme="light"] {
     --body-text: theme("colors.gray.800");
     --body-bg: theme("colors.white");
