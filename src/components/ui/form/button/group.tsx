@@ -9,15 +9,18 @@ import {
   isValidElement,
   memo,
 } from 'react';
+import style from './group.module.css';
 
 /**
  * The props of the ButtonGroup component.
  */
-export type ButtonGroupProps = ButtonProps;
+export type ButtonGroupProps = ButtonProps & {
+  isAttached?: boolean;
+};
 
 const ButtonGroup = memo(
   forwardRef(((props, ref) => {
-    const { size, variant, className, children, ...rest } = props;
+    const { size, variant, isAttached, className, children, ...rest } = props;
     const remainingProps: object = { ...rest, ref };
 
     const content = Children.map(children, (child, index) => {
@@ -37,9 +40,11 @@ const ButtonGroup = memo(
       <Stack
         direction="row"
         role="group"
+        data-attached={isAttached}
         data-orientation="horizontal"
         className={cn(
-          'data-[attached]:data-[orientation="horizontal"]:: -me-px inline-flex gap-2',
+          'data-[attached]:data-[orientation="horizontal"]:: -me-px inline-flex',
+          isAttached ? `gap-0 ${style['button-group']}` : 'gap-2',
           className
         )}
         {...remainingProps}
