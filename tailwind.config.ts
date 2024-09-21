@@ -14,6 +14,19 @@ const config: Config = {
   prefix: '',
   theme: {
     extend: customTheme,
+    animation: {
+      checkbox: '200ms linear 0s 1 normal none running checkbox',
+    },
+    keyframes: {
+      checkbox: {
+        '0%': {
+          opacity: '0',
+          strokeDashoffset: '16',
+          transform: 'scale(0.95)',
+        },
+        '100%': { opacity: '1', strokeDashoffset: '0', transform: 'scale(1)' },
+      },
+    },
   },
   plugins: [
     plugin(({ addUtilities }) => {
