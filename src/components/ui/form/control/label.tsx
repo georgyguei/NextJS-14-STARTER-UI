@@ -1,10 +1,10 @@
+import type { FormControlProps } from '@/components/ui/form/control';
 import Box from '@/components/ui/layout/box';
 import type { UIComponent } from '@/components/ui/type';
 import { cn } from '@/lib/utils';
 import { forwardRef, memo } from 'react';
-import type { FormControlProps } from '.';
 
-export type FormLabelProps = Pick<FormControlProps, 'isRequired'> & {
+export type FormLabelProps = FormControlProps & {
   requiredIndicator?: React.ReactElement;
 };
 
@@ -21,8 +21,16 @@ export type FormLabelProps = Pick<FormControlProps, 'isRequired'> & {
  */
 const FormLabel = memo(
   forwardRef(((props, ref) => {
-    const { isRequired, requiredIndicator, className, children, ...rest } =
-      props;
+    const {
+      isRequired,
+      isInvalid,
+      isDisabled,
+      isReadOnly,
+      requiredIndicator,
+      className,
+      children,
+      ...rest
+    } = props;
     const remainingProps: object = { ...rest, ref };
 
     return (
@@ -31,8 +39,12 @@ const FormLabel = memo(
         className={cn(
           isRequired ? 'flex justify-start gap-1' : 'block text-start',
           'font-medium text-md transition-common duration-normal',
+          isDisabled && 'data-[disabled]:opacity-40',
           className
         )}
+        data-disabled={isDisabled ? '' : undefined}
+        data-invalid={isInvalid ? '' : undefined}
+        data-readonly={isReadOnly ? '' : undefined}
         {...remainingProps}
       >
         {children}

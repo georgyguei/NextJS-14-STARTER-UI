@@ -30,7 +30,16 @@ export type FormControlProps = {
  */
 const FormControl = memo(
   forwardRef(((props, ref) => {
-    const { isInvalid, isRequired, className, children, ...rest } = props;
+    const {
+      isInvalid,
+      isRequired,
+      isDisabled,
+      isReadOnly,
+      className,
+      children,
+      ...rest
+    } = props;
+
     const remainingProps: object = { ...rest, ref };
 
     const formRequiredIndicatorElement = isRequired
@@ -42,29 +51,38 @@ const FormControl = memo(
         }) || <FormRequiredIndicator>*</FormRequiredIndicator>
       : undefined;
 
-    const formElements = isRequired
-      ? Children.map(children, child => {
-          if (isValidElement(child)) {
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-            switch ((child as any).type.displayName) {
-              case 'FormLabel':
-                return cloneElement(child as React.ReactElement, {
-                  isRequired: isRequired,
-                  requiredIndicator: formRequiredIndicatorElement,
-                });
-              case 'FormRequiredIndicator':
-                return null;
-            }
-          }
-          return child;
-        })
-      : children;
+    const formElements = Children.map(children, child => {
+      if (isValidElement(child)) {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        switch ((child as any).type.displayName) {
+          case 'FormLabel':
+            return cloneElement(child as React.ReactElement, {
+              isRequired:
+                (child as React.ReactElement).props.isRequired || isRequired,
+              isInvalid:
+                (child as React.ReactElement).props.isInvalid || isInvalid,
+              isDisabled:
+                (child as React.ReactElement).props.isDisabled || isDisabled,
+              isReadOnly:
+                (child as React.ReactElement).props.isReadOnly || isReadOnly,
+              requiredIndicator:
+                (child as React.ReactElement).props.requiredIndicator ||
+                formRequiredIndicatorElement,
+            });
+          case 'FormRequiredIndicator':
+            return null;
+        }
+      }
+      return child;
+    });
 
     return (
       <Box
         className={cn('relative w-full', className)}
         role="group"
-        data-invalid={isInvalid}
+        data-disabled={isDisabled ? '' : undefined}
+        data-invalid={isInvalid ? '' : undefined}
+        data-readonly={isReadOnly ? '' : undefined}
         {...remainingProps}
       >
         {formElements}
