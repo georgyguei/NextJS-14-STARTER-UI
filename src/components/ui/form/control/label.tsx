@@ -38,7 +38,7 @@ const FormLabel = memo(
         as="label"
         className={cn(
           isRequired ? 'flex justify-start gap-1' : 'block text-start',
-          'font-medium text-md transition-common duration-normal',
+          'me-3 font-medium text-md transition-common duration-normal',
           isDisabled && 'data-[disabled]:opacity-40',
           className
         )}
